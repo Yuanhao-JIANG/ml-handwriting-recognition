@@ -7,7 +7,7 @@ from model import LeNet5
 
 
 # get data
-dataset = datasets.MNIST("./data", True, transforms.ToTensor(), None, True)
+dataset = datasets.MNIST("./data/train_val", True, transforms.ToTensor(), None, True)
 
 # config info
 save_dir = Path("./saved_model").absolute()
@@ -70,8 +70,7 @@ def train():
         val_loss = val(val_loader, net)
         if val_loss < min_loss:
             min_loss = val_loss
-            print('Saving model (epoch = {:4d}, loss = {:.4f})'
-                  .format(epoch + 1, min_loss))
+            print('Saving model (epoch = {:4d}, loss = {:.4f})'.format(epoch + 1, min_loss))
             torch.save(net.state_dict(), save_dir / f"model.pt")
             current_stop_cnt = 0
         else:
