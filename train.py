@@ -19,11 +19,21 @@ epoch_size = 50
 class_num = 10
 early_stop_cnt = 5
 device = "cuda" if torch.cuda.is_available() else "cpu"
+print("Use device: "+device)
 
 # prepare data
 train_dataset, val_dataset = random_split(dataset, [train_len, val_len])
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
+
+# image example
+# for imgs, labels_int in train_loader:
+#     idx = 30
+#     print(imgs[idx].shape)
+#     imgs = transforms.ToPILImage()(imgs[idx])
+#     print(labels_int[idx])
+#     imgs.show()
+#     exit()
 
 # load model
 net = LeNet5(class_num)
@@ -34,7 +44,7 @@ net = net.to(device)
 
 # train and validation
 def val(val_set, model):
-    model.eval()                             # set model to evalutation mode
+    model.eval()                             # set model to evaluation mode
     total_loss = 0
     for x, y in val_set:                     # iterate through the dataloader
         x, y = x.to(device), y.to(device)    # move data to device (cpu/cuda)
@@ -55,6 +65,8 @@ def train():
     for epoch in range(epoch_size):
         net.train()
         for imgs, labels_int in train_loader:
+            # imgs: [batch_size, 1, 28, 28]
+            # labels_int: [batch_size]
             labels = torch.zeros([batch_size, class_num])
             for i in range(batch_size):
                 labels[i][labels_int[i]] = 1
@@ -71,7 +83,7 @@ def train():
         if val_loss < min_loss:
             min_loss = val_loss
             print('Saving model (epoch = {:4d}, loss = {:.4f})'.format(epoch + 1, min_loss))
-            torch.save(net.state_dict(), save_dir / f"model.pt")
+            torch.save(net.state_dict(), save_dir / "model.pt")
             current_stop_cnt = 0
         else:
             current_stop_cnt += 1
@@ -81,3 +93,6 @@ def train():
             break
 
     print('Finished training after {} epochs'.format(current_epoch))
+
+
+# train()
