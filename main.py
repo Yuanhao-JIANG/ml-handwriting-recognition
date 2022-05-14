@@ -1,4 +1,0 @@
-import train
-
-
-train.train()
