@@ -19,3 +19,5 @@ gives output:
 ./imgs/2.png -> 2
 <br>
 ./imgs/3.png -> 3
+
+Note that the images should have black background and their number written in white color, and resized to the dimension 28x28 before using the model to recognize them.
