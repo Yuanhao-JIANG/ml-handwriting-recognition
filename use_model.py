@@ -29,6 +29,7 @@ with torch.no_grad():
     outputs, _ = model(x)
     outputs = outputs.detach().cpu()
 
-    for i in range(len(outputs)):
-        print(f"The number in the image {img_paths[i]} is {torch.argmax(outputs[i]).item()}.")
+    with open("./output.txt", "w") as f:
+        for i in range(len(outputs)):
+            f.write(f"{img_paths[i]} -> {torch.argmax(outputs[i]).item()}" + "\n")
 
